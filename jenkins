@@ -21,19 +21,19 @@ pipeline {
         }
         stage('stage1') {
             steps {
-                sudo mkdir /home/geetha
-                sudo mkdir /home/anjali
+                sudo mkdir /home/$Folder1
+                sudo mkdir /home/$Folder2
             }
     }
     stage('stage2') {
             steps {
-                sudo cd /home/geetha
-                sudo touch file.txt
+                sudo cd /home/$Folder1
+                sudo touch $File Name
             }
     }
     stage('stage3') {
             steps {
-                sudo cp /home/geetha /home/anjali
+                sudo cp /home/$Folder1 /home/$Folder2
             }
     }
 }
