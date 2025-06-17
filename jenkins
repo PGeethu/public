@@ -1,40 +1,29 @@
 pipeline {
-    agent { label "ubuntu" }
-
-    tools {
-        // Install the Maven version configured as "M3" and add it to the path.
-        maven "M3"
+    agent any
+ 
+    parameters {
+        string(name: 'FOLDER1', defaultValue: '/tmp/source', description: 'Source folder path')
+        string(name: 'FOLDER2', defaultValue: '/tmp/destination', description: 'Destination folder path')
+        string(name: 'FILENAME', defaultValue: 'file.txt', description: 'File name to copy')
     }
-
+ 
     stages {
-        stage('Build') {
+        stage('Show Inputs') {
             steps {
-                // Get some code from a GitHub repository
-                git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-
-                // Run Maven on a Unix agent.
-                sh "mvn -Dmaven.test.failure.ignore=true clean package"
-
-                // To run Maven on a Windows agent, use
-                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+                echo "Source Folder: ${params.FOLDER1}"
+                echo "Destination Folder: ${params.FOLDER2}"
+                echo "File to copy: ${params.FILENAME}"
             }
         }
-        stage('stage1') {
+ 
+        stage('Copy File') {
             steps {
-                sudo mkdir /home/$Folder1
-                sudo mkdir /home/$Folder2
+                sh '''
+                    echo "Copying file..."
+                    cp "${FOLDER1}/${FILENAME}" "${FOLDER2}/"
+                    echo "File copied successfully."
+                '''
             }
+        }
     }
-    stage('stage2') {
-            steps {
-                sudo cd /home/$Folder1
-                sudo touch $File Name
-            }
-    }
-    stage('stage3') {
-            steps {
-                sudo cp /home/$Folder1 /home/$Folder2
-            }
-    }
-}
 }
